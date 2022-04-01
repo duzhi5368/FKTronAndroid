@@ -1,0 +1,3 @@
+include ':tronsdk'
+include ':app'
+rootProject.name = "FK_TRON多签工具"
