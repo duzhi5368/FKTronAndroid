@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/layout/activity_send_trx.xml" value="0.2151268115942029" />
         <entry key="app/src/main/res/layout/activity_send_trx20_token.xml" value="0.21467391304347827" />
+        <entry key="app/src/main/res/layout/activity_send_usdt.xml" value="0.20035460992907803" />
         <entry key="app/src/main/res/layout/activity_trx20_token_balance.xml" value="0.2151268115942029" />
       </map>
     </option>

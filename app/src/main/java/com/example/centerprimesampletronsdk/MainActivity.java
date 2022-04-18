@@ -37,13 +37,15 @@ public class MainActivity extends AppCompatActivity {
         binding.checkERCTokenkBalance.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, CheckTrx20TokenBalanceActivity.class));
         });
-
         binding.sendTrx.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, SendTrxActivity.class));
         });
-
-        // send USDT
+        binding.sendUSDT.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, SendUSDTActivity.class));
+        });
+        
         // Create mutilsig
+        // create a transform
         // Sign a transform
         // Boardcast a transform
 

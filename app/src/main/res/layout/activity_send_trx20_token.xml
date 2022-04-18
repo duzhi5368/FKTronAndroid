@@ -55,7 +55,8 @@
                 android:paddingTop="3dp"
                 android:paddingBottom="3dp"
                 android:text="21000"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/ethAmount"
@@ -66,7 +67,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="USDT 转换金额"
+                android:hint="USDT 转帐金额"
                 android:inputType="numberDecimal"
                 android:paddingTop="3dp"
                 android:paddingBottom="3dp"

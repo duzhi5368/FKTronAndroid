@@ -367,9 +367,12 @@ public class TronWalletManager {
             byte[] priKey = walletApi.backupWallet(password.toCharArray(), walletPath, context);
 
             String privatekey = (bytesToHex(priKey));
+
+            long lAmount = big2.longValue();
+            //toAddress = "TZ2XqAyRJ5UuKmN5DbFsnxGcu1ir1swhEK";
             GrpcAPI.EasyTransferResponse response = WalletApi
                     .easyTransferByPrivate(ByteArray.fromHexString(privatekey),
-                            WalletApi.decodeFromBase58Check(toAddress), big2.longValue());
+                            WalletApi.decodeFromBase58Check(toAddress), lAmount);
 
             if (response.getResult().getResult() == true) {
                 Protocol.Transaction transaction = response.getTransaction();
@@ -393,7 +396,7 @@ public class TronWalletManager {
         });
     }
 
-    public Single<String> sendTRX20(String sender, String password, String receiver, String contractAddress, BigDecimal amount,Context context ) {
+    public Single<String> sendTRX20(Context context, String sender, String password, String receiver, String contractAddress, BigDecimal amount) {
         return Single.fromCallable(() -> {
             BigDecimal big2 = amount;
             big2 = big2.multiply(new BigDecimal(1000000));
@@ -404,12 +407,10 @@ public class TronWalletManager {
             walletApi.loginAndroid(password.toCharArray(), walletPath, context);
             byte[] priKey = walletApi.backupWallet(password.toCharArray(), walletPath, context);
             String privatekey = (bytesToHex(priKey));
-            //trx20
-//            long tokenAmount = (long) (13 * Math.pow(10, 18));
             String transferParams = toAddress + "," + big2.stripTrailingZeros().toPlainString();
 
             String[] parameters = new String[]{contractAddress,
-                    "transfer(address,uint256)", transferParams, "false", "10000000", "0"};
+                    "transfer(address,uint256)", transferParams, "false", "100000000", "0"};
             GrpcAPI.TransactionExtention transactionExtention = null;
             try {
                 transactionExtention = walletApi.triggerContract(parameters, decodeFromBase58Check(sender));
@@ -424,15 +425,16 @@ public class TronWalletManager {
             }
             if (transactionExtention.hasResult()) {
                 Protocol.Transaction transactionTRX20 = transactionExtention.getTransaction();
-                //sign
+                // 签名
                 Protocol.Transaction mTransactionSigned = TransactionUtils.setTimestamp(transactionTRX20);
                 byte[] privateBytes = ByteArray.fromHexString(privatekey);
                 ECKey ecKey = ECKey.fromPrivate(privateBytes);
                 mTransactionSigned = walletApi.signTransaction(mTransactionSigned, ecKey);
-
-                //broadcastTransaction
+                // 公告
                 boolean sent = WalletApi.broadcastTransaction(mTransactionSigned);
-                System.out.println(sent);
+                if (!sent){
+                    return null;
+                }
                 String txHash = ByteArray
                         .toHexString(Sha256Hash.hash(mTransactionSigned.getRawData().toByteArray()));
 
@@ -555,6 +557,8 @@ public class TronWalletManager {
     }
 
     private void sendEventToLedger(HashMap<String, Object> map, Context context) {
+        return;
+        /*
         try {
             SubmitTransactionModel submitTransactionModel = new SubmitTransactionModel();
             submitTransactionModel.setTx_type("TRON");
@@ -576,7 +580,7 @@ public class TronWalletManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        */
     }
 
     private HashMap<String, Object> deviceInfo(Context context) {

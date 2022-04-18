@@ -61,6 +61,13 @@
             android:exported="true"
             android:screenOrientation="portrait"
             />
+
+        <activity
+            android:name=".SendUSDTActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            />
+
         <activity
             android:name=".CheckTrx20TokenBalanceActivity"
             android:exported="true"
