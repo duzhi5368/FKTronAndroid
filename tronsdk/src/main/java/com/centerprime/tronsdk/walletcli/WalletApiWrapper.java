@@ -615,5 +615,13 @@ public class WalletApiWrapper {
     return transaction;
   }
 
+  public boolean accountPermissionUpdate(String ownerAddress, String permission)
+          throws IOException, CipherException, CancelException {
+    if (wallet == null || !wallet.isLoginState()) {
+      System.out.println("Warning: accountPermissionUpdate failed,  Please login first !!");
+      return false;
+    }
+    return wallet.accountPermissionUpdate(ownerAddress, permission);
+  }
 
 }

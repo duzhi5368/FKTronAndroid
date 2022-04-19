@@ -1227,5 +1227,46 @@ public class WalletApi {
     });
   }
 
+  public boolean accountPermissionUpdate(byte[] owner, String permissionJson)
+          throws CipherException, IOException, CancelException {
+    return false;
+  }
+  /*
+  public boolean accountPermissionUpdate(byte[] owner, String permissionJson)
+          throws CipherException, IOException, CancelException {
+    AccountPermissionUpdateContract contract =
+            createAccountPermissionContract(owner, permissionJson);
+    TransactionExtention transactionExtention = rpcCli.accountPermissionUpdate(contract);
+    return processTransactionExtention(transactionExtention);
+  }
 
+  public AccountPermissionUpdateContract createAccountPermissionContract(byte[] owner,
+                                                                         String permissionJson) {
+    AccountPermissionUpdateContract.Builder builder = AccountPermissionUpdateContract.newBuilder();
+
+    JSONObject permissions = JSONObject.parseObject(permissionJson);
+    JSONObject owner_permission = permissions.getJSONObject("owner_permission");
+    JSONObject witness_permission = permissions.getJSONObject("witness_permission");
+    JSONArray active_permissions = permissions.getJSONArray("active_permissions");
+
+    if (owner_permission != null) {
+      Permission ownerPermission = json2Permission(owner_permission);
+      builder.setOwner(ownerPermission);
+    }
+    if (witness_permission != null) {
+      Permission witnessPermission = json2Permission(witness_permission);
+      builder.setWitness(witnessPermission);
+    }
+    if (active_permissions != null) {
+      List<Permission> activePermissionList = new ArrayList<>();
+      for (int j = 0; j < active_permissions.size(); j++) {
+        JSONObject permission = active_permissions.getJSONObject(j);
+        activePermissionList.add(json2Permission(permission));
+      }
+      builder.addAllActives(activePermissionList);
+    }
+    builder.setOwnerAddress(ByteString.copyFrom(owner));
+    return builder.build();
+  }
+  */
 }

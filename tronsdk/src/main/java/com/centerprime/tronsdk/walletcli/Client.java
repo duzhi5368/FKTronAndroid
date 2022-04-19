@@ -850,6 +850,28 @@ public class Client {
     }
   }
 
+  private void updateAccountPermission(String[] parameters)
+          throws CipherException, IOException, CancelException {
+    if (parameters == null || parameters.length != 2) {
+      System.out.println(
+              "UpdateAccountPermission needs 2 parameters, like UpdateAccountPermission ownerAddress permissions, permissions is json format");
+      return;
+    }
+
+    byte[] ownerAddress = WalletApi.decodeFromBase58Check(parameters[0]);
+    if (ownerAddress == null) {
+      System.out.println("GetContract: invalid address!");
+      return;
+    }
+
+    boolean ret = walletApiWrapper.accountPermissionUpdate(ownerAddress, parameters[1]);
+    if (ret) {
+      Log.d("tag", "updateAccountPermission successful !!!!");
+    } else {
+      Log.d("tag", "updateAccountPermission failed !!!!");
+    }
+  }
+
   private void help() {
     System.out.println("Help: List of Tron Wallet-cli commands");
     System.out.println(
@@ -918,6 +940,7 @@ public class Client {
     System.out.println("UnfreezeBalance");
     System.out.println("UnfreezeAsset");
     System.out.println("UpdateAccount");
+    System.out.println("UpdateAccountPermission");
     System.out.println("UpdateAsset");
     System.out.println("UpdateEnergyLimit contract_address energy_limit");
     System.out.println("UpdateSetting contract_address consume_user_resource_percent");
@@ -1052,6 +1075,10 @@ public class Client {
           }
           case "updateaccount": {
             updateAccount(parameters);
+            break;
+          }
+          case "updateaccountpermission": {
+            updateAccountPermission(parameters);
             break;
           }
           case "setaccountid": {

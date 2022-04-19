@@ -43,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
         binding.sendUSDT.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, SendUSDTActivity.class));
         });
-        
+
         // Create mutilsig
         // create a transform
-        // Sign a transform
-        // Boardcast a transform
+        // Sign a transform - signTransaction / signTransactionByApi2
+        // Boardcast a transform  - broadcastTransaction
 
     }
 }

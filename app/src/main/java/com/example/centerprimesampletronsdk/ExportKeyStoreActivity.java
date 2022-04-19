@@ -46,7 +46,7 @@ public class ExportKeyStoreActivity extends AppCompatActivity {
                 Toast.makeText(this, "输入钱包地址", Toast.LENGTH_SHORT).show();
             }
 
-            tronWalletManager.getKeyStore(walletAddress, this)
+            tronWalletManager.exportKeyStore(walletAddress, this)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(keystore -> {

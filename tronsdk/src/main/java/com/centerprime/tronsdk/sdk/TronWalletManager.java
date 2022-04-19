@@ -70,7 +70,6 @@ public class TronWalletManager {
 
     private HyperLedgerApi hyperLedgerApi;
 
-
     public void init(Context context) {
         WalletApi.reloadClient(context);
 
@@ -100,7 +99,7 @@ public class TronWalletManager {
                 WalletApiWrapper walletApi = new WalletApiWrapper();
                 walletApi.registerWallet(password.toCharArray(), context);
                 String walletAddress = walletApi.getAddress();
-                String keystore = getKeyStore(walletAddress, context).blockingGet();
+                String keystore = exportKeyStore(walletAddress, context).blockingGet();
                 body.put("action_type", "WALLET_CREATE");
                 body.put("wallet_address", walletAddress);
                 body.put("status", "SUCCESS");
@@ -154,7 +153,7 @@ public class TronWalletManager {
                 walletApi.importWallet(password.toCharArray(), privateKey);
 
                 String walletAddress = walletApi.getAddress();
-                String keystore = getKeyStore(walletAddress, context).blockingGet();
+                String keystore = exportKeyStore(walletAddress, context).blockingGet();
                 //String keystore = getKeyStore(walletAddress, context).blockingGet();
                 body.put("action_type", "WALLET_IMPORT_PRIVATE_KEY");
                 body.put("wallet_address", walletAddress);
@@ -170,36 +169,25 @@ public class TronWalletManager {
         });
     }
 
-
     /**
      * Export Keystore by wallet address
      */
     public Single<String> exportKeyStore(String walletAddress, Context context) {
         return Single.fromCallable(() -> {
-            String wallet = walletAddress;
-            if (wallet.startsWith("0x")) {
-                wallet = wallet.substring(2);
-            }
+
             String walletPath = context.getFilesDir().getPath() + "/" + "tron_" + walletAddress.toLowerCase() + ".json";
             File keystoreFile = new File(walletPath);
-            HashMap<String, Object> body = new HashMap<>();
-            body.put("network", isMainNet() ? "MAINNET" : "TESTNET");
             if (keystoreFile.exists()) {
-                body.put("action_type", "WALLET_EXPORT_KEYSTORE");
-                body.put("wallet_address", walletAddress);
-                body.put("status", "SUCCESS");
-                sendEventToLedger(body, context);
                 return read_file(context, keystoreFile.getName());
             } else {
-                body.put("action_type", "WALLET_EXPORT_KEYSTORE");
-                body.put("wallet_address", walletAddress);
-                body.put("status", "FAILURE");
-                sendEventToLedger(body, context);
                 throw new Exception("Keystore is NULL");
             }
         });
     }
 
+    /**
+     * Export private key by wallet address
+     */
     public Single<String> exportPrivateKey(String walletAddress, String password, Context context) {
         return Single.fromCallable(() -> {
             HashMap<String, Object> body = new HashMap<>();
@@ -260,7 +248,6 @@ public class TronWalletManager {
         });
     }
 
-
     /**
      * Get TRX20 Token Balance of Wallet
      */
@@ -308,53 +295,9 @@ public class TronWalletManager {
         });
     }
 
-//    public Single<GrpcAPI.TransactionExtention> getTrc20Balance(@NonNull String ownerAddress, String contractAddrStr) {
-//        return Single.fromCallable(() -> WalletApi.decodeFromBase58Check(ownerAddress))
-//                .flatMap(addressBytes -> {
-//
-//                    Protocol.Account account = WalletApi.queryAccount(addressBytes);
-//                    Log.d("tag","\n" + Utils.printAccount(account));
-//                    String transferMethod = "balanceOf(address)";
-//                    String transferParams = ownerAddress;
-//
-//                    String contractTrigger = "";
-//
-//                    try {
-//                        contractTrigger = AbiUtil.parseMethod(transferMethod, transferParams);
-//                    } catch (EncodingException e ) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    byte[] input = Hex.decode(contractTrigger);
-//
-//                    GrpcAPI.TransactionExtention transactionExtention = null;
-//                    transactionExtention = WalletApi.triggerContract(addressBytes, WalletApi.decodeFromBase58Check(contractAddrStr), 0L, input, 1_000_000_000L, 0, null).blockingGet();
-//
-//                    Protocol.Transaction resultTransaction = transactionExtention.getTransaction();
-//
-//                    if (resultTransaction.getRetCount() != 0 &&
-//                            transactionExtention.getConstantResult(0) != null &&
-//                            transactionExtention.getResult() != null) {
-//                        byte[] result = transactionExtention.getConstantResult(0).toByteArray();
-//                        System.out.println("message:" + resultTransaction.getRet(0).getRet());
-//                        System.out.println(":" + ByteArray
-//                                .toStr(transactionExtention.getResult().getMessage().toByteArray()));
-//                        System.out.println("Result:" + Hex2Decimal.hex2Decimal(Hex.toHexString(result)));
-//
-//                        long balance = Hex2Decimal.hex2Decimal(Hex.toHexString(result));
-//
-//                        System.out.println(balance);
-//                    }
-//
-//
-//
-//
-//
-//                    return null;
-//                });
-//    }
-
-
+    /**
+     * Send Trx
+     */
     public Single<String> sendTRX(Context context, String sender, String password, String receiver, BigDecimal amount) {
         return Single.fromCallable(() -> {
             BigDecimal big2 = amount;
@@ -396,6 +339,9 @@ public class TronWalletManager {
         });
     }
 
+    /**
+     * Send Trc 20
+     */
     public Single<String> sendTRX20(Context context, String sender, String password, String receiver, String contractAddress, BigDecimal amount) {
         return Single.fromCallable(() -> {
             BigDecimal big2 = amount;
@@ -462,6 +408,8 @@ public class TronWalletManager {
         });
     }
 
+
+
     public static byte[] decode58Check(String input) {
         try {
             byte[] decodeCheck = Base58.decode(input);
@@ -521,24 +469,6 @@ public class TronWalletManager {
         }
         return new String(hexChars);
     }
-
-
-    /**
-     * Get Keystore by wallet address
-     */
-    public Single<String> getKeyStore(String walletAddress, Context context) {
-        return Single.fromCallable(() -> {
-
-            String walletPath = context.getFilesDir().getPath() + "/" + "tron_" + walletAddress.toLowerCase() + ".json";
-            File keystoreFile = new File(walletPath);
-            if (keystoreFile.exists()) {
-                return read_file(context, keystoreFile.getName());
-            } else {
-                throw new Exception("Keystore is NULL");
-            }
-        });
-    }
-
 
     public String read_file(Context context, String filename) throws IOException {
         FileInputStream fis = context.openFileInput(filename);
@@ -603,5 +533,4 @@ public class TronWalletManager {
             return null;
         }
     }
-
 }
