@@ -73,6 +73,24 @@
             android:exported="true"
             android:screenOrientation="portrait"
             />
+
+        <activity
+            android:name=".CreateTransformActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".SignTransformActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".BoardcastTransformActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

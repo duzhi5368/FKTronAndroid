@@ -408,6 +408,87 @@ public class TronWalletManager {
         });
     }
 
+    /**
+     * Broadcast Trc 20 transform
+     */
+
+    public Single<Boolean> broadcastTRC20Transform(String transactionData){
+        return Single.fromCallable(() -> {
+            try {
+                Protocol.Transaction transaction = Protocol.Transaction.parseFrom(ByteArray.fromHexString(transactionData));
+                boolean sent = WalletApi.broadcastTransaction(transaction);
+                return sent;
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Sign Trc 20 transform
+     */
+
+    public Single<String> signTRX20Transform(Context context, String unsignedData, String signer, String password){
+        return Single.fromCallable(() -> {
+            WalletApiWrapper walletApi = new WalletApiWrapper();
+            String walletPath = "tron_" + signer.toLowerCase() + ".json";
+            walletApi.loginAndroid(password.toCharArray(), walletPath, context);
+            byte[] priKey = walletApi.backupWallet(password.toCharArray(), walletPath, context);
+            String privatekey = (bytesToHex(priKey));
+
+            Protocol.Transaction unsignedTransaction = Protocol.Transaction.parseFrom(ByteArray.fromHexString(unsignedData));
+            if (unsignedTransaction == null || unsignedTransaction.getRawData().getContractCount() == 0) {
+                System.out.println("Invalid transaction !!!");
+                return null;
+            }
+            Protocol.Transaction mTransactionSigned = TransactionUtils.setTimestamp(unsignedTransaction);
+            byte[] privateBytes = ByteArray.fromHexString(privatekey);
+            ECKey ecKey = ECKey.fromPrivate(privateBytes);
+            mTransactionSigned = walletApi.signTransaction(mTransactionSigned, ecKey);
+            if(null == mTransactionSigned){
+                return null;
+            }
+            return ByteArray.toHexString(mTransactionSigned.toByteArray());
+        });
+    }
+
+    /**
+     * Create Trc 20 transform
+     */
+    public Single<String> createTRX20Transform(Context context, String sender, String password, String receiver, String contractAddress, BigDecimal amount) {
+        return Single.fromCallable(() -> {
+            BigDecimal big2 = amount;
+            big2 = big2.multiply(new BigDecimal(1000000));
+            String toAddress = receiver;
+
+            WalletApiWrapper walletApi = new WalletApiWrapper();
+            String walletPath = "tron_" + sender.toLowerCase() + ".json";
+            walletApi.loginAndroid(password.toCharArray(), walletPath, context);
+            byte[] priKey = walletApi.backupWallet(password.toCharArray(), walletPath, context);
+            String privatekey = (bytesToHex(priKey));
+            String transferParams = toAddress + "," + big2.stripTrailingZeros().toPlainString();
+
+            String[] parameters = new String[]{contractAddress,
+                    "transfer(address,uint256)", transferParams, "false", "100000000", "0"};
+            GrpcAPI.TransactionExtention transactionExtention = null;
+            try {
+                transactionExtention = walletApi.triggerContract(parameters, decodeFromBase58Check(sender));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (CipherException e) {
+                e.printStackTrace();
+            } catch (CancelException e) {
+                e.printStackTrace();
+            } catch (EncodingException e) {
+                e.printStackTrace();
+            }
+            if (transactionExtention.hasResult()) {
+                Protocol.Transaction transactionTRX20 = transactionExtention.getTransaction();
+                return ByteArray.toHexString(transactionTRX20.toByteArray());
+            }
+            return null;
+        });
+    }
 
 
     public static byte[] decode58Check(String input) {

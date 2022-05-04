@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_boardcast_trx20_transform.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/layout/activity_check_balance.xml" value="0.29583333333333334" />
+        <entry key="app/src/main/res/layout/activity_create_trx20_transform.xml" value="0.17933130699088146" />
         <entry key="app/src/main/res/layout/activity_create_wallet.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/layout/activity_export_keystore.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/layout/activity_export_private_key.xml" value="0.29583333333333334" />
@@ -13,7 +15,9 @@
         <entry key="app/src/main/res/layout/activity_send_trx.xml" value="0.2151268115942029" />
         <entry key="app/src/main/res/layout/activity_send_trx20_token.xml" value="0.21467391304347827" />
         <entry key="app/src/main/res/layout/activity_send_usdt.xml" value="0.20035460992907803" />
+        <entry key="app/src/main/res/layout/activity_sign_trx20_transform.xml" value="0.20878623188405798" />
         <entry key="app/src/main/res/layout/activity_trx20_token_balance.xml" value="0.2151268115942029" />
+        <entry key="app/src/main/res/layout/layout0.xml" value="0.25253292806484295" />
       </map>
     </option>
   </component>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+    <!--   <ScrollView
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:scrollbars="none"
+           android:fillViewport="true">
+   -->
+
+    <LinearLayout
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
+
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="1dp"
+                        android:layout_gravity="center"
+                        android:background="#23147a"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/importType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginRight="16dp"
+                        android:text="需要签名的交易数据"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+
+                <EditText
+                    android:id="@+id/unsignedData"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/edittext"
+                    android:gravity="center"
+                    android:hint="请在这里粘贴交易数据..."
+                    android:textSize="18dp" />
+
+
+                <EditText
+                    android:id="@+id/address2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="请输入签名人地址"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="请输入签名人密码"
+                    android:inputType="textPassword"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:layout_marginTop="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/signedData"
+                    android:visibility="visible"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_1_11"
+                    android:text="复制到剪切板"
+                    android:textColor="@color/white"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+
+                <Button
+                    android:id="@+id/signBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="40dp"
+                    android:background="@drawable/button_1_11"
+                    android:text="开始签名"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+    <!--  </ScrollView> -->
+</layout>

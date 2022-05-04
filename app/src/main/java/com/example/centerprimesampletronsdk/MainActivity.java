@@ -44,8 +44,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, SendUSDTActivity.class));
         });
 
-        // Create mutilsig
-        // create a transform
+        // Create mutilsig （因grpcAPI版本问题，无法支持）
+
+        binding.createTrans.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, CreateTransformActivity.class));
+        });
+        binding.sigMutilsigTrans.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, SignTransformActivity.class));
+        });
+        binding.boardcastTrans.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, BoardcastTransformActivity.class));
+        });
         // Sign a transform - signTransaction / signTransactionByApi2
         // Boardcast a transform  - broadcastTransaction
 
