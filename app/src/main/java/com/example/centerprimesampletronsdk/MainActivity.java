@@ -55,8 +55,5 @@ public class MainActivity extends AppCompatActivity {
         binding.boardcastTrans.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, BoardcastTransformActivity.class));
         });
-        // Sign a transform - signTransaction / signTransactionByApi2
-        // Boardcast a transform  - broadcastTransaction
-
     }
 }
